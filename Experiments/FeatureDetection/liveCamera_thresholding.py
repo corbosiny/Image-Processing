@@ -3,6 +3,7 @@ import numpy as np
 from Filters import Filters          # This should allow us to import the Filters file.
 from WebcamVideoStream import WebcamVideoStream
 from Cascading import Cascading
+from Detect_Blur import DetectBlur
 
 # For this program I'm testing the use of thresholding by applying different filters
 # and seeing how easy it is to detect corners and objects within the camera frame.
@@ -11,6 +12,7 @@ vs = WebcamVideoStream(src=0).start()       # so we want to read video in as a s
 #cap = cv2.VideoCapture(0)
 filters = Filters()
 cascades = Cascading()
+blurDetection = DetectBlur()
 ''' OUR MAIN LOOP WHERE I WILL USE METHODS TO RETRIEVE DIFFERENT RESULTS
     FOR ALL THE THRESHOLDING AND CASCADING.
 '''
@@ -24,8 +26,31 @@ while True:
     # the value will result in less frames being read per second.
     #instance = vs.getGrabbed()
     #cascades.faceCascadeDetectionOfImage(instance)
-    #frame = filters.grayScaleImage(frame)
-    frame = filters.simpleThreshBinary(frame)
+
+    # So now we store the grayFrame seperately aside from our regular colored
+    # frame so we can perform processing on the grayframe since many open cv
+    # operations are dependent upon a grayscaled image.
+    grayFrame = filters.grayScaleImage(frame)
+    # We grayscaled it so we can apply the laplacian variance on the grayscaled
+    # frame.
+    fm = blurDetection.variance_of_laplacian(grayFrame)
+    text = "Not Blurry"
+
+    # if the focus measure is less than the supplied threshold,
+    # then the image should be considered "blurry"
+    threshValue = 100       # This will be the value we fiddle with most to determine thresh marking.
+    if fm < 100:
+        text = "Blurry"
+    # The blurriness is detected from the grayscaled form of our image
+    # which is being detected instantaneously while we stream the regular
+    # colored frame, so we are essentially doing parallel frame processing with
+    # the stream outputting the frame while we do some grayscaled calculations
+    # in the back end side of things.
+    # show the image
+    cv2.putText(frame, "{}: {:.2f}".format(text, fm), (10, 30),
+    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 3)
+
+    #frame = filters.simpleThreshBinary(frame)
 
     # Keep note of error I have run into with colored thresholding.. 
 

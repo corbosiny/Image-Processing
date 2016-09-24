@@ -31,7 +31,7 @@ class Filters:
     # src image, max value, adaptive method, threshold type, block size (pixel neighborhood)
     # Lastly constant to subract from mean or weighted mean.
     # 11 is popular online for block size, 2 is popular for constant.
-    def adaptiveThresholding_Gaus(img):
+    def adaptiveThresholding_Gaus(self,frame):
         grayedImg = grayScaleImage(img)
         gaus = cv2.adaptiveThreshold(grayedImg, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
                                      cv2.THRESH_BINARY, 11, 2)
@@ -50,7 +50,7 @@ class Filters:
     # This will allow us to smoothen out the noise, and then we could perhaps
     # grayscale the image, and see if we can detect objects faster than a regular
     # image.
-    def gaussianBlurApplying(img):
+    def gaussianBlurApplying(self, frame):
         gausBlur = cv2.GaussianBlur(img, (5,5), 0)
         return gausBlur
 
