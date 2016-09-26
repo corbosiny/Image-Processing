@@ -4,7 +4,21 @@ import cv2
 import os
 
 class DetectBlur:
-    
+    # We have our accessor and mutator methods for the blurThresh
+    # because we will want to fiddle around with the blur detection
+    # to fine tune it to a set level for best blur detection focus range.
+
+    def __init__(self, threshValue):
+        self.__threshBlur = threshValue
+        
+    # Mutator method for changing static blurDetectionThresh value.
+    def setBlurThresh(self, newValue):
+        self.__threshBlur = newValue
+
+    # Accessor method for static blurDetectionThresh value.
+    def getBlurThresh(self):
+        return self.__threshBlur
+        
     def variance_of_laplacian(self, frame):
             # compute the Laplacian of the image and then return the focus
         # measure, which is simply the variance of the Laplacian
