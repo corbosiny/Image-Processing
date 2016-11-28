@@ -17,7 +17,6 @@ class Filters:
         return threshold        # We now return the thresholded image.
 
 
-    
     def grayScaleImage(self, frame):
         grayscaled = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # Grayscale the image
         return grayscaled                                   # Return the grayscaled image.
@@ -31,6 +30,7 @@ class Filters:
     # src image, max value, adaptive method, threshold type, block size (pixel neighborhood)
     # Lastly constant to subract from mean or weighted mean.
     # 11 is popular online for block size, 2 is popular for constant.
+    
     def adaptiveThresholding_Gaus(self,frame):
         grayedImg = grayScaleImage(img)
         gaus = cv2.adaptiveThreshold(grayedImg, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
@@ -43,26 +43,35 @@ class Filters:
         return gaus         # We want to return the gaussian filtered adaptive thresholded image.
 
 
+    def gausBlurSpecified(self, frame, xscale, yscale):
+        gausBlur = cv2.GaussianBlur(frame, (xscale, yscale), 0)
+        return gausBlur
 
+    
+    def binaryThreshSpecified(self, frame, threshScale):
+        thresh = cv2.threshold(frame, threshScale, 255, cv2.THRESH_BINARY)[1]
+        return thresh
 
 
     # Lets test out some Gaussian filtering with no thresholding.
     # This will allow us to smoothen out the noise, and then we could perhaps
     # grayscale the image, and see if we can detect objects faster than a regular
     # image.
+    
     def gaussianBlurApplying(self, frame):
-        gausBlur = cv2.GaussianBlur(img, (5,5), 0)
+        gausBlur = cv2.GaussianBlur(frame, (5,5), 0)
         return gausBlur
 
     # This method will take in a colored picture and perform the binary thresh on it,
     # a thresh level of 12 with a max value of 255.
+    
     def coloredThresholding(self, frame):
         retval, coloredThresh = cv2.threshold(frame, 12, 255, cv2.THRESH_BINARY);
         return coloredThresh;
 
 
 
-
+    
     def cornerDetecting(img):
         imgGrayed = grayScaleImage(img)
         # Since pixels are read as numerical indexes, we convert our grayscaled image into a series of

@@ -4,31 +4,31 @@ from pprint import pprint
 
 class ImageCompression:
     
-    def lengthOfImageBytes(image):
-        lengthOfImage = len(image)
+    def lengthOfImageBytes(self, frame):
+        lengthOfImage = len(frame)
         return lengthOfImage
 
-    def encodeImage(image):
+    def encodeImage(self, frame):
         # When calling the build cv2.imencode iamage, the parameters take inthe file extension of the image
         # along with the image to be written.
         # Worth noting that the function returns a single row matrix of type CV_8UC1 which contains encoded image
         # as array of bytes according to the API.
-        enc = cv2.imencode('.jpg', image)[1]
+        enc = cv2.imencode('.jpg', frame)[1]
         return enc
 
     # This method is useful if we strictly wish to compress data as a string.
-    def encodeImageAsString(image):
-        img_str = cv2.imencode('.jpg', image)[1].tostring()
+    def encodeImageAsString(self, frame):
+        img_str = cv2.imencode('.jpg', frame)[1].tostring()
         return img_str
 
     # Returns image from buffer in memory.
-    def decodeImage(stringEncoding):
+    def decodeImage(self, stringEncoding):
         # Convert encoded Message into int8 bytes size elements within a matrix.
         nparr = np.fromstring(stringEncoding, np.uint8)
         # The function reads values in as a vector of bytes, colors are stored in  BGR format,
         # we want the image only in color...for NOW.
-        img = cv2.imdecode(nparr, cv2.CV_LOAD_IMAGE_COLOR)
-        return img
+        frame = cv2.imdecode(nparr, cv2.CV_LOAD_IMAGE_COLOR)
+        return frame
 
     def windowDestroyer(numberOfFramesOpen):
         totalFrames = numberOfFramesOpen * 4        # Every frame takes 4 wait keys.
